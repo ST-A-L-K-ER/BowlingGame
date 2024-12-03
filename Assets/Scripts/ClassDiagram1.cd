@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GameManager">
+    <Position X="8.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAoAAAgCAIAADABgAQQAQoAACAAAAAAFAAAAAAECA=</HashCode>
+      <FileName>Assets\Scripts\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BallController">
+    <Position X="3.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAQAAAKAKCCAEAAAABAAAAAAAAAAAAAgBAAAAAIA=</HashCode>
+      <FileName>Assets\Scripts\BallController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pin">
+    <Position X="11.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCAAAAACBBAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAI=</HashCode>
+      <FileName>Assets\Scripts\Pin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ScoreUIManager">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gBSQgBEAADAAAAAAAAQEAAACAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ScoreUIManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MenuControls">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\MenuControls.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EndMenuControls">
+    <Position X="13" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAQCEAAAQAAQQAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\EndMenuControls.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArrowController">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAACAACAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ArrowController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
