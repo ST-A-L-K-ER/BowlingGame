@@ -9,6 +9,7 @@ TagManager:
   - Poing
   - Ball
   - FeedBack
+  - Resume
   layers:
   - Default
   - TransparentFX

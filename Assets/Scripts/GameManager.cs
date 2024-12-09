@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.IO;
+using TMPro;
+using UnityEngine.UI;
 
 // Основной класс, управляющий логикой игры
 public class GameManager : MonoBehaviour
@@ -19,12 +22,20 @@ public class GameManager : MonoBehaviour
     public Pin[] pins; // Ссылки на все кегли
     private ScoreUIManager UI; // Ссылка на менеджер пользовательского интерфейса
 
+    private string json;
+
+    public GameObject loadButton;
+
     // Инициализация игры
     void Start()
     {
         pins = FindObjectsOfType<Pin>(); // Находим все кегли на сцене
         ball = FindObjectOfType<BallController>(); // Находим шар на сцене
         UI = FindObjectOfType<ScoreUIManager>(); // Находим интерфейсный менеджер
+        if (!File.Exists(Application.dataPath + "/savegame.json"))
+        {
+            loadButton.SetActive(false);
+        }
     }
 
     // Запись результатов после броска
@@ -50,14 +61,15 @@ public class GameManager : MonoBehaviour
         {
             RecordComputerrRoll(pinsKnockedDown);
         }
+
+        SaveGame();
     }
 
     // Запись броска игрока
     public void RecordPlayerRoll(int pinsKnockedDown)
     {
         playerRolls[playerRollIndex] = pinsKnockedDown; // Сохраняем результат броска
-        bool isSpare = currentRoll == 2 && (playerRolls[playerRollIndex - 1] + pinsKnockedDown == 10); // Проверяем на спэр
-        UI.DisplayPlayerScore(playerRollIndex, pinsKnockedDown, isSpare); // Обновляем интерфейс
+        UI.DisplayPlayerScore(playerRollIndex, pinsKnockedDown); // Обновляем интерфейс
 
         playerRollIndex++;
 
@@ -92,8 +104,7 @@ public class GameManager : MonoBehaviour
     public void RecordComputerrRoll(int pinsKnockedDown)
     {
         computerRolls[computerRollIndex] = pinsKnockedDown; // Сохраняем результат броска
-        bool isSpare = currentRoll == 2 && (computerRolls[computerRollIndex - 1] + pinsKnockedDown == 10); // Проверяем на спэр
-        UI.DisplayComputerScore(computerRollIndex, pinsKnockedDown, isSpare); // Обновляем интерфейс
+        UI.DisplayComputerScore(computerRollIndex, pinsKnockedDown); // Обновляем интерфейс
 
         computerRollIndex++;
 
@@ -226,5 +237,82 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Игра завершена!");
         SceneManager.LoadScene("End"); // Переход к сцене завершения игры
+    }
+
+    public void SaveGame()
+    {
+        Saves data = new Saves
+        {
+            currentFrame = currentFrame,
+            currentRoll = currentRoll,
+            playerScore = playerScore,
+            computerScore = computerScore,
+            playerRolls = (int[])playerRolls.Clone(),
+            computerRolls = (int[])computerRolls.Clone(),
+            pinHasFallen = new bool[pins.Length],
+            pinIsFallen = new bool[pins.Length],
+            isPlayerTurn = ball.isPlayerTurn,
+            playerRollIndex = playerRollIndex,
+            computerRollIndex = computerRollIndex
+        };
+
+        for (int i = 0; i < pins.Length; i++)
+        {
+            data.pinHasFallen[i] = pins[i].hasFallen;
+        }
+
+        for (int i = 0; i < pins.Length; i++)
+        {
+            data.pinIsFallen[i] = pins[i].IsFallen;
+        }
+
+        json = JsonUtility.ToJson(data);
+        File.WriteAllText(Application.dataPath + "/savegame.json", json);
+
+        Debug.Log("Игра сохранена!" + json);
+    }
+
+    public void LoadGame()
+    {
+        string path = Application.dataPath + "/savegame.json"; ;
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            Saves data = JsonUtility.FromJson<Saves>(json);
+
+            currentFrame = data.currentFrame;
+            currentRoll = data.currentRoll;
+            playerScore = data.playerScore;
+            computerScore = data.computerScore;
+            playerRolls = (int[])data.playerRolls.Clone();
+            computerRolls = (int[])data.computerRolls.Clone();
+            ball.isPlayerTurn = data.isPlayerTurn;
+            playerRollIndex = data.playerRollIndex;
+            computerRollIndex = data.computerRollIndex;
+
+            for (int i = 0; i < pins.Length; i++)
+            {
+                pins[i].hasFallen = data.pinHasFallen[i];
+                pins[i].IsFallen = data.pinIsFallen[i];
+                pins[i].gameObject.SetActive(!data.pinHasFallen[i]);
+            }
+
+            for (int i = 0; i < playerRollIndex; i++)
+            {
+                UI.DisplayPlayerScore(i, playerRolls[i]); // Обновляем интерфейс
+            }
+
+            for (int i = 0; i < computerRollIndex; i++)
+            {
+                UI.DisplayComputerScore(i, computerRolls[i]);
+            }
+
+            loadButton.SetActive(false);
+            Debug.Log("Игра загружена!");
+        }
+        else
+        {
+            Debug.LogWarning("Файл сохранения не найден!");
+        }
     }
 }

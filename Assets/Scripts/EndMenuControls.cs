@@ -1,3 +1,4 @@
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,6 +17,24 @@ public class EndMenuControls : MonoBehaviour
     // Метод для обработки нажатия кнопки "Играть снова"
     public void PlayPressed()
     {
+        if (File.Exists(Application.dataPath + "/savegame.json"))
+        {
+            File.Delete(Application.dataPath + "/savegame.json");
+            Saves data = new Saves
+            {
+                currentFrame = 1,
+                currentRoll = 1,
+                playerScore = 0,
+                computerScore = 0,
+                playerRolls = new int[21],
+                computerRolls = new int[21],
+                pinHasFallen = new bool[10],
+                pinIsFallen = new bool[10],
+                playerRollIndex = 0,
+                computerRollIndex = 0
+            };
+        }
+
         SceneManager.LoadScene("Game"); // Загружаем сцену с игрой
     }
 

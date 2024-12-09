@@ -14,8 +14,8 @@ public class ScoreUIManager : MonoBehaviour
     public TextMeshProUGUI[] computerFrameScores; // Массив для компьютера
 
     // Счетчики пропущенных ячеек для корректного отображения страйков
-    private int playerSkip = 0;
-    private int computerSkip = 0;
+    public int playerSkip = 0;
+    public int computerSkip = 0;
 
     // Ссылки на компоненты GameManager и BallController
     private GameManager GM;
@@ -43,10 +43,12 @@ public class ScoreUIManager : MonoBehaviour
     }
 
     // Метод для отображения счета игрока в текстовых элементах
-    public void DisplayPlayerScore(int rollIndex, int pinsKnockedDown, bool isSpare = false)
+    public void DisplayPlayerScore(int rollIndex, int pinsKnockedDown)
     {
+        bool isSpare = rollIndex > 0 && (rollIndex + playerSkip) % 2 != 0 && (GM.playerRolls[rollIndex - 1] + pinsKnockedDown == 10); // Проверяем на спэр 
+
         // Проверяем различные условия для обновления текста ячейки
-        if (pinsKnockedDown == 10 && GM.currentRoll == 1) // Страйк
+        if (pinsKnockedDown == 10 && (rollIndex + playerSkip) % 2 == 0) // Страйк
         {
             playerFrameScores[rollIndex + playerSkip].text = "X";
             playerSkip++; // Увеличиваем счетчик пропущенных ячеек
@@ -66,10 +68,12 @@ public class ScoreUIManager : MonoBehaviour
     }
 
     // Метод для отображения счета компьютера в текстовых элементах
-    public void DisplayComputerScore(int rollIndex, int pinsKnockedDown, bool isSpare = false)
+    public void DisplayComputerScore(int rollIndex, int pinsKnockedDown)
     {
+        bool isSpare = rollIndex > 0 && (rollIndex + computerSkip) % 2 != 0 && (GM.computerRolls[rollIndex - 1] + pinsKnockedDown == 10); // Проверяем на спэр
+
         // Проверяем различные условия для обновления текста ячейки
-        if (pinsKnockedDown == 10 && GM.currentRoll == 1) // Страйк
+        if (pinsKnockedDown == 10 && (rollIndex + computerSkip) % 2 == 0) // Страйк
         {
             computerFrameScores[rollIndex + computerSkip].text = "X";
             computerSkip++; // Увеличиваем счетчик пропущенных ячеек
